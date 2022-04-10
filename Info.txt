@@ -1,0 +1,10 @@
+=====================================|
+SimplePong Snapshots and Pre-Relises |
+=====================================|
+
+Hello! This is SimplePong Snapshot or Pre-Relise. Some things that are in those versions wodnn't be relised
+in Relise version.
+
+Don't addict to them)
+
+-Aboba Games Command
