@@ -4,6 +4,10 @@
 Changelogs (For snapshots and pre-relises):
 
 -Snapshot 0.1b10.4.22:
+    -minor bug fixes
+    -added "All rights reserved" text on main menu
+
+-Snapshot 0.1b10.4.22:
     -added icon
 
 -Snapshot 0.1a10.4.22:
