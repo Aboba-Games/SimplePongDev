@@ -116,6 +116,7 @@ clock = pygame.time.Clock()
 platImg = pygame.image.load('player.jpg').convert()
 blockImg =[ pygame.image.load('brick.jpg').convert(), pygame.image.load('player.jpg').convert()]
 circleImg = pygame.image.load('circle.jpg').convert()
+pygame.display.set_icon(pygame.image.load('icon.svg'))
 mainbg = pygame.image.load('mainBg.jpg').convert()
 mainbg = pygame.transform.scale(mainbg,(WIDTH, HEIGHT))
 mainbg_rect = mainbg.get_rect()

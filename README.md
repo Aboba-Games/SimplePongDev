@@ -3,6 +3,9 @@
 
 Changelogs (For snapshots and pre-relises):
 
+-Snapshot 0.1b10.4.22:
+    -added icon
+
 -Snapshot 0.1a10.4.22:
     -new backgrounds
     -added Pause Menu(can be accessed via clicking ESCape button)
