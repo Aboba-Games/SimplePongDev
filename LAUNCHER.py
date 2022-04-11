@@ -113,7 +113,7 @@ clock = pygame.time.Clock()
 
 #textures and design
 platImg = pygame.image.load('player.jpg').convert()
-blockImg =[ pygame.image.load('brick.jpg').convert(), pygame.image.load('player.jpg').convert()]
+blockImg =[ pygame.image.load('brick.jpg').convert(), pygame.image.load('block.jpg').convert()]
 circleImg = pygame.image.load('circle.jpg').convert()
 pygame.display.set_icon(pygame.image.load('icon.svg'))
 mainbg = pygame.image.load('mainBg.jpg').convert()
@@ -144,8 +144,14 @@ levels = [
     ['####################',
      '# #### ### ### ### #'],
 
-    ['# # # # ## # # # # #',
-     '####################'],
+    ['### # # #### # # ###',
+     '## ## ## ## ## ## ##'],
+
+    ['##### #### #### #####',
+     '##### #### #### #####'],
+
+    [' # # # # # # # # # #',
+     '# # # # # # # # # # '],
         ]
 
 
@@ -183,10 +189,6 @@ while run:
                 if state!=0:
                     state = 3
                     circle.rect.center = (WIDTH//2, HEIGHT//2)
-            if event.key == pygame.K_z:
-                level+=1
-                if state!=1 and state!=2 and state!=3 and state!=4:
-                    state = 1
             if event.key == pygame.K_r:
                 if state != 0:
                     state = 0
@@ -236,6 +238,7 @@ while run:
         sprites.draw(window)
         sprites.update()
         printing(window, 'Score: '+str(playerScore), 'Sheriff', 30, GREEN, 60, HEIGHT-70)
+        printing(window, 'Level: '+str(level), 'Sheriff', 30, GREEN, 840, HEIGHT-70)
         pygame.display.flip()
     elif state == 1:
         window.blit(bglv, bglv_rect)
@@ -255,20 +258,20 @@ while run:
     elif state == 3:
         window.blit(menubg, menubg_rect)
         printing(window, 'SimplePong', 'Sheriff', 40, GRAY, WIDTH//2, HEIGHT//2)
-        printing(window, 'Version: snapshot 0.1b10.4.22', 'Sheriff', 20, YELLOW, WIDTH//2, HEIGHT/2-20)
+        printing(window, 'Version: snapshot 0.1a11.4.22', 'Sheriff', 20, YELLOW, WIDTH//2, HEIGHT/2-20)
         printing(window, '|E|Play', 'Sheriff', 30, GREEN, WIDTH//2, HEIGHT//2+80)
         printing(window, '|Q|Exit', 'Sheriff', 30, RED, WIDTH//2, HEIGHT//2+120)
         printing(window, 'Aboba Games®', 'Arial', 25, GRAY, 90, 12)
-        printing(window, 'Updated: 04/10/22', 'Arial', 25, GRAY, 790, 12)
+        printing(window, 'Updated: 04/11/22', 'Arial', 25, GRAY, 790, 12)
         printing(window, 'All Rights Reserved!©', 'Sheriff', 25, LIGHTGRAY, WIDTH//2, 580)
         pygame.display.flip()
     elif state == 4:
         window.blit(menubg, menubg_rect)
         printing(window, 'Pause', 'Sheriff', 40, GRAY, WIDTH//2, HEIGHT//2-50)
         printing(window, '|C|Continue', 'Sheriff', 30, GREEN, WIDTH//2, HEIGHT//2+20)
-        printing(window, '|M|Exit to Main Menu', 'Sheriff', 30, RED, WIDTH//2, HEIGHT//2+50)
+        printing(window, '|M|Exit to Main Menu', 'Sheriff', 30, ORANGE, WIDTH//2, HEIGHT//2+50)
         printing(window, '|Q|Exit to Desktop', 'Sheriff', 30, RED, WIDTH//2, HEIGHT//2+80)
         pygame.display.flip()
 
 pygame.quit()
-#s01b104
+#s01a114
