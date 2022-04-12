@@ -78,14 +78,23 @@ class Circle(pygame.sprite.Sprite):
     def update(self):
         if self.rect.right > WIDTH:
             self.speedx = -self.speedx
+            pygame.mixer.music.load('ball.mp3')
+            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.play(loops = 0)
             
 
         if self.rect.left < 0:
             self.speedx = -self.speedx
+            pygame.mixer.music.load('ball.mp3')
+            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.play(loops = 0)
             
 
         if self.rect.top < 0:
             self.speedy = -self.speedy
+            pygame.mixer.music.load('ball.mp3')
+            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.play(loops = 0)
 
         self.rect.x += self.speedx
         self.rect.y += self.speedy
@@ -175,22 +184,40 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 if state != 0:
+                    pygame.mixer.music.load('button.mp3')
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(loops = 0)
                     run = False
             if event.key == pygame.K_c:
                 if state != 0:
+                    pygame.mixer.music.load('button.mp3')
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(loops = 0)
                     state = 0
             if event.key == pygame.K_ESCAPE:
                 if state!=1 and state!=2 and state!=3:
+                    pygame.mixer.music.load('button.mp3')
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(loops = 0)
                     state = 4
             if event.key == pygame.K_e:
                 if state != 0:
+                    pygame.mixer.music.load('button.mp3')
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(loops = 0)
                     state = 0
             if event.key == pygame.K_m:
                 if state!=0:
+                    pygame.mixer.music.load('button.mp3')
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(loops = 0)
                     state = 3
                     circle.rect.center = (WIDTH//2, HEIGHT//2)
             if event.key == pygame.K_r:
                 if state != 0:
+                    pygame.mixer.music.load('button.mp3')
+                    pygame.mixer.music.set_volume(0.3)
+                    pygame.mixer.music.play(loops = 0)
                     state = 0
                     level = 0
                     playerScore = 0
@@ -202,14 +229,21 @@ while run:
                                 blocks.add(block)
                     circle.rect.center = (WIDTH//2, HEIGHT//2)
 
+
     hitscircle = pygame.sprite.spritecollide(player, circles, False)
     if hitscircle:
         circle.speedy = -circle.speedy
+        pygame.mixer.music.load('ball.mp3')
+        pygame.mixer.music.set_volume(0.4)
+        pygame.mixer.music.play(loops = 0)
 
     hitsblocks = pygame.sprite.spritecollide(circle, blocks, False)
     if hitsblocks:
         circle.speedy = -circle.speedy
         for hit in hitsblocks:
+            pygame.mixer.music.load('ball.mp3')
+            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.play(loops = 0)
             hit.hp-=1
             hit.updTx()
             if hit.hp <1: 
@@ -219,7 +253,7 @@ while run:
     if len(blocks.sprites()) == 0:
         level+=1
         if level == len(levels):
-            state = 2 #end
+            state = 5 #end
         elif state!=2:
             state = 1 #level passed
             for i in range(20):
@@ -247,14 +281,19 @@ while run:
         printing(window, '|M|Exit to Main Menu', 'Arial', 25, ORANGE, WIDTH//2, HEIGHT//2+110)
         printing(window, '|Q|Exit to Desktop', 'Arial', 25, RED, WIDTH//2, HEIGHT//2+140)
         pygame.display.flip()
+        pygame.mixer.music.load('win.mp3')
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(loops = 0)
     elif state == 2:
         window.blit(bglv, bglv_rect)
-        printing(window, "The End!", 'Arial', 40, VIOLET, WIDTH//2, HEIGHT//2-50)
+        printing(window, "You've lost!", 'Arial', 40, VIOLET, WIDTH//2, HEIGHT//2-50)
         printing(window, '|R|Restart', 'Arial', 25, BLUE, WIDTH//2, HEIGHT//2+20)
         printing(window, '|M|Exit to Main Menu', 'Arial', 25, ORANGE, WIDTH//2, HEIGHT//2+50)
         printing(window, '|Q|Exit to Desktop', 'Arial', 25, RED, WIDTH//2, HEIGHT//2+80)
-        printing(window, 'For more games you can visit our github: https://github.com/Aboba-Games', 'Arial', 20, SKYBLUE, WIDTH//2, HEIGHT//2+160)
         pygame.display.flip()
+        pygame.mixer.music.load('fail.mp3')
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(loops = 0)
     elif state == 3:
         window.blit(menubg, menubg_rect)
         printing(window, 'SimplePong', 'Sheriff', 40, GRAY, WIDTH//2, HEIGHT//2)
@@ -272,6 +311,17 @@ while run:
         printing(window, '|M|Exit to Main Menu', 'Sheriff', 30, ORANGE, WIDTH//2, HEIGHT//2+50)
         printing(window, '|Q|Exit to Desktop', 'Sheriff', 30, RED, WIDTH//2, HEIGHT//2+80)
         pygame.display.flip()
-
+    elif state == 5:
+        window.blit(menubg, menubg_rect)
+        printing(window, "Congratulations! You've won the game!", 'Arial', 40, VIOLET, WIDTH//2, HEIGHT//2-50)
+        printing(window, '|R|Restart', 'Arial', 25, BLUE, WIDTH//2, HEIGHT//2+20)
+        printing(window, '|M|Exit to Main Menu', 'Arial', 25, ORANGE, WIDTH//2, HEIGHT//2+50)
+        printing(window, '|Q|Exit to Desktop', 'Arial', 25, RED, WIDTH//2, HEIGHT//2+80)
+        printing(window, 'For more games you can visit our github: https://github.com/Aboba-Games', 'Arial', 20, SKYBLUE, WIDTH//2, HEIGHT//2+160)
+        pygame.display.flip()
+        pygame.mixer.music.load('win.mp3')
+        pygame.mixer.music.set_volume(0.3)
+        pygame.mixer.music.play(loops = 0)
+        
 pygame.quit()
-#s01a114
+#s01a124

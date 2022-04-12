@@ -3,6 +3,10 @@
 
 Changelogs (For snapshots and pre-relises):
 
+-Snapshot 0.1a12.4.22(s01a124):
+    -added sound effects
+    -added win and lose screens
+
 -Snapshot 0.1a11.4.22(s01a114):
     -new textures for blocks and platform
     -new levels
