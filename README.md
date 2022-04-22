@@ -3,6 +3,10 @@
 
 Changelogs (For snapshots and pre-relises):
 
+-Pre-Release 0.1a22.04.22(pr01a224):
+    -added bonuses
+    -new way of playing sound
+
 -Snapshot 0.1a12.4.22(s01a124):
     -added sound effects
     -added win and lose screens

@@ -1,10 +1,12 @@
 import pygame
 import random
+import time
 
 #window
 FPS = 70
 WIDTH = 900
 HEIGHT = 600
+SPEED = 10
 
 def printing(window, text, font, size, color, x, y):
     fontName = pygame.font.match_font(font)
@@ -52,9 +54,9 @@ class Platform(pygame.sprite.Sprite):
         self.speedx = 0
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
-            self.speedx = -10
+            self.speedx = -SPEED
         if keys[pygame.K_d]:
-            self.speedx = 10
+            self.speedx = SPEED
         self.rect.x += self.speedx  
 
         if self.rect.right > WIDTH:
@@ -78,23 +80,17 @@ class Circle(pygame.sprite.Sprite):
     def update(self):
         if self.rect.right > WIDTH:
             self.speedx = -self.speedx
-            pygame.mixer.music.load('ball.mp3')
-            pygame.mixer.music.set_volume(0.4)
-            pygame.mixer.music.play(loops = 0)
+            ballSound.play()
             
 
         if self.rect.left < 0:
             self.speedx = -self.speedx
-            pygame.mixer.music.load('ball.mp3')
-            pygame.mixer.music.set_volume(0.4)
-            pygame.mixer.music.play(loops = 0)
+            ballSound.play()
             
 
         if self.rect.top < 0:
             self.speedy = -self.speedy
-            pygame.mixer.music.load('ball.mp3')
-            pygame.mixer.music.set_volume(0.4)
-            pygame.mixer.music.play(loops = 0)
+            ballSound.play()
 
         self.rect.x += self.speedx
         self.rect.y += self.speedy
@@ -112,8 +108,20 @@ class Block(pygame.sprite.Sprite):
     def updTx(self):
         self.image = pygame.transform.scale(blockImg[self.hp-1],(43,43))
         
-    
-
+class Bonus(pygame.sprite.Sprite):
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((20,25))
+        self.image.fill(ORANGE)
+        self.rect = self.image.get_rect()
+        self.rect.center = (WIDTH//2,HEIGHT+1)
+        self.rect.x = x
+        self.rect.y = y
+    def update(self):
+        self.speedy = 5
+        self.rect.y += self.speedy
+        if self.rect.top>HEIGHT:
+            self.kill()
 
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -135,6 +143,11 @@ menubg = pygame.image.load('menuBg.jpg').convert()
 menubg = pygame.transform.scale(menubg, (WIDTH, HEIGHT))
 menubg_rect = menubg.get_rect()
 
+ballSound = pygame.mixer.Sound('ball.mp3')
+ballSound.set_volume(0.3)
+
+buttonSound = pygame.mixer.Sound('button.mp3')
+buttonSound.set_volume(0.3)
 
 #objects
 player = Platform()
@@ -142,6 +155,7 @@ circle = Circle()
 sprites = pygame.sprite.Group()
 circles = pygame.sprite.Group()
 blocks = pygame.sprite.Group()
+bonuses = pygame.sprite.Group()
 circles.add(circle)
 sprites.add(player)
 sprites.add(circle)
@@ -184,40 +198,37 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 if state != 0:
-                    pygame.mixer.music.load('button.mp3')
-                    pygame.mixer.music.set_volume(0.3)
-                    pygame.mixer.music.play(loops = 0)
+                    buttonSound.play()
                     run = False
             if event.key == pygame.K_c:
                 if state != 0:
-                    pygame.mixer.music.load('button.mp3')
-                    pygame.mixer.music.set_volume(0.3)
-                    pygame.mixer.music.play(loops = 0)
+                    buttonSound.play()
                     state = 0
             if event.key == pygame.K_ESCAPE:
                 if state!=1 and state!=2 and state!=3:
-                    pygame.mixer.music.load('button.mp3')
-                    pygame.mixer.music.set_volume(0.3)
-                    pygame.mixer.music.play(loops = 0)
+                    buttonSound.play()
                     state = 4
             if event.key == pygame.K_e:
                 if state != 0:
-                    pygame.mixer.music.load('button.mp3')
-                    pygame.mixer.music.set_volume(0.3)
-                    pygame.mixer.music.play(loops = 0)
+                    buttonSound.play()
                     state = 0
             if event.key == pygame.K_m:
-                if state!=0:
-                    pygame.mixer.music.load('button.mp3')
-                    pygame.mixer.music.set_volume(0.3)
-                    pygame.mixer.music.play(loops = 0)
+                if state != 0:
+                    buttonSound.play()
                     state = 3
+                    level = 0
+                    playerScore = 0
+                    for i in range(20):
+                        for j in range(len(levels[level])):
+                            if levels[level][j][i] == '#':
+                                block = Block(i*45, j*45)
+                                sprites.add(block)
+                                blocks.add(block)
                     circle.rect.center = (WIDTH//2, HEIGHT//2)
+                    player.rect.center = (WIDTH//2, HEIGHT-20)
             if event.key == pygame.K_r:
                 if state != 0:
-                    pygame.mixer.music.load('button.mp3')
-                    pygame.mixer.music.set_volume(0.3)
-                    pygame.mixer.music.play(loops = 0)
+                    buttonSound.play()
                     state = 0
                     level = 0
                     playerScore = 0
@@ -233,22 +244,38 @@ while run:
     hitscircle = pygame.sprite.spritecollide(player, circles, False)
     if hitscircle:
         circle.speedy = -circle.speedy
-        pygame.mixer.music.load('ball.mp3')
-        pygame.mixer.music.set_volume(0.4)
-        pygame.mixer.music.play(loops = 0)
+        ballSound.play()
+
+    hitsbonuses = pygame.sprite.spritecollide(player, bonuses, True)
+    for bonus in hitsbonuses:
+        if hitsbonuses:
+            num = random.choice([1,2,3])
+            if num == 1:
+                playerScore += 1
+            elif num ==  2:
+                player.speedx+=2
+                actionStart = time.time()
+                if time.time()<actionStart+15:
+                    SPEED = 20
+                else:
+                    SPEED = 10
+            elif num == 3:
+                pass
 
     hitsblocks = pygame.sprite.spritecollide(circle, blocks, False)
     if hitsblocks:
         circle.speedy = -circle.speedy
         for hit in hitsblocks:
-            pygame.mixer.music.load('ball.mp3')
-            pygame.mixer.music.set_volume(0.4)
-            pygame.mixer.music.play(loops = 0)
+            ballSound.play()
             hit.hp-=1
             hit.updTx()
-            if hit.hp <1: 
+            if hit.hp < 1: 
                 hit.kill()               
                 playerScore+=1
+                if random.random()<0.2:
+                    bonus = Bonus(hit.rect.x, hit.rect.y)
+                    sprites.add(bonus)
+                    bonuses.add(bonus)
 
     if len(blocks.sprites()) == 0:
         level+=1
@@ -281,9 +308,6 @@ while run:
         printing(window, '|M|Exit to Main Menu', 'Arial', 25, ORANGE, WIDTH//2, HEIGHT//2+110)
         printing(window, '|Q|Exit to Desktop', 'Arial', 25, RED, WIDTH//2, HEIGHT//2+140)
         pygame.display.flip()
-        pygame.mixer.music.load('win.mp3')
-        pygame.mixer.music.set_volume(0.3)
-        pygame.mixer.music.play(loops = 0)
     elif state == 2:
         window.blit(bglv, bglv_rect)
         printing(window, "You've lost!", 'Arial', 40, VIOLET, WIDTH//2, HEIGHT//2-50)
@@ -291,17 +315,14 @@ while run:
         printing(window, '|M|Exit to Main Menu', 'Arial', 25, ORANGE, WIDTH//2, HEIGHT//2+50)
         printing(window, '|Q|Exit to Desktop', 'Arial', 25, RED, WIDTH//2, HEIGHT//2+80)
         pygame.display.flip()
-        pygame.mixer.music.load('fail.mp3')
-        pygame.mixer.music.set_volume(0.3)
-        pygame.mixer.music.play(loops = 0)
     elif state == 3:
         window.blit(menubg, menubg_rect)
         printing(window, 'SimplePong', 'Sheriff', 40, GRAY, WIDTH//2, HEIGHT//2)
-        printing(window, 'Version: snapshot 0.1a11.4.22', 'Sheriff', 20, YELLOW, WIDTH//2, HEIGHT/2-20)
+        printing(window, 'Version: pre-release 0.1a22.04.22', 'Sheriff', 20, YELLOW, WIDTH//2, HEIGHT/2-20)
         printing(window, '|E|Play', 'Sheriff', 30, GREEN, WIDTH//2, HEIGHT//2+80)
         printing(window, '|Q|Exit', 'Sheriff', 30, RED, WIDTH//2, HEIGHT//2+120)
         printing(window, 'Aboba Games®', 'Arial', 25, GRAY, 90, 12)
-        printing(window, 'Updated: 04/11/22', 'Arial', 25, GRAY, 790, 12)
+        printing(window, 'Updated: 04/22/22', 'Arial', 25, GRAY, 790, 12)
         printing(window, 'All Rights Reserved!©', 'Sheriff', 25, LIGHTGRAY, WIDTH//2, 580)
         pygame.display.flip()
     elif state == 4:
@@ -319,9 +340,6 @@ while run:
         printing(window, '|Q|Exit to Desktop', 'Arial', 25, RED, WIDTH//2, HEIGHT//2+80)
         printing(window, 'For more games you can visit our github: https://github.com/Aboba-Games', 'Arial', 20, SKYBLUE, WIDTH//2, HEIGHT//2+160)
         pygame.display.flip()
-        pygame.mixer.music.load('win.mp3')
-        pygame.mixer.music.set_volume(0.3)
-        pygame.mixer.music.play(loops = 0)
         
 pygame.quit()
-#s01a124
+#pr01a224
